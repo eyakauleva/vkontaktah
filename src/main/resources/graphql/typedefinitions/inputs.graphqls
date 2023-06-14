@@ -1,0 +1,7 @@
+input UserInput {
+ login: String! @NotBlank
+ firstName: String! @NotBlank
+ lastName: String! @NotBlank
+ gender: Gender
+ age: Int
+}

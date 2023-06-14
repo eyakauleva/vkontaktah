@@ -1,4 +1,4 @@
-package com.solvd.micro9.vkontaktah.web.controller;
+package com.solvd.micro9.vkontaktah.web;
 
 import graphql.language.StringValue;
 import graphql.schema.Coercing;

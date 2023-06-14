@@ -1,0 +1,3 @@
+type Query {
+    getAllUsers(size: Int! @Min(value: 1), page: Int! @Min): [User]
+}

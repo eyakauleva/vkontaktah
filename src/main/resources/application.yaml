@@ -1,4 +1,9 @@
 spring:
+  neo4j:
+    uri: bolt://${NEO4J_URI}
+    authentication:
+      username: ${NEO4J_USERNAME}
+      password: ${NEO4J_PASSWORD}
   graphql:
     graphiql:
       enabled: true

@@ -1,6 +1,5 @@
 package com.solvd.micro9.vkontaktah.web;
 
-import com.solvd.micro9.vkontaktah.web.controller.LocalDateTimeToStringCoercing;
 import graphql.schema.GraphQLScalarType;
 import graphql.validation.rules.OnValidationErrorStrategy;
 import graphql.validation.rules.ValidationRules;
