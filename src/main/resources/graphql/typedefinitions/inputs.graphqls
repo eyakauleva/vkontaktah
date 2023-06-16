@@ -3,7 +3,7 @@ input UserInput {
  firstName: String! @NotBlank
  lastName: String! @NotBlank
  gender: Gender
- age: Int
+ age: Int @Positive @Digits(integer: 3, fraction: 0)
 }
 
 input PostInput {
@@ -12,7 +12,7 @@ input PostInput {
 }
 
 input LikeInput {
- value: Float!
+ value: Float! @Positive @Max(value: 10) @Digits(integer: 2, fraction: 1)
  user: UserID!
 }
 

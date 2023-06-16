@@ -3,3 +3,12 @@ directive @NotBlank(message : String = "graphql.validation.NotBlank.message")
 
 directive @Min(value : Int = 0, message : String = "graphql.validation.Min.message")
                     on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @Max(value : Int = 2147483647, message : String = "graphql.validation.Max.message")
+                on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @Positive(message : String = "graphql.validation.Positive.message")
+                    on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @Digits(integer : Int!, fraction : Int!, message : String = "graphql.validation.Digits.message")
+                    on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
