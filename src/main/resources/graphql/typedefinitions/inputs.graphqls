@@ -5,3 +5,17 @@ input UserInput {
  gender: Gender
  age: Int
 }
+
+input PostInput {
+ text: String! @NotBlank
+ author: UserID!
+}
+
+input LikeInput {
+ value: Float!
+ user: UserID!
+}
+
+input UserID {
+ id: String! @NotBlank
+}

@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -18,8 +18,7 @@ import java.util.Set;
 public class Post {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     private String text;
 
@@ -31,10 +30,13 @@ public class Post {
     @LastModifiedDate
     private LocalDateTime lastModified;
 
+    @Version
+    private Long version;
+
     @Relationship(type = "CREATED", direction = Relationship.Direction.INCOMING)
     private User author;
 
     @Relationship(type = "LIKED", direction = Relationship.Direction.INCOMING)
-    private Set<Estimator> estimates;
+    private Set<Like> likes;
 
 }

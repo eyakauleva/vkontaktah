@@ -19,8 +19,19 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<User> getAll(Pageable pageable) {
-        return userRepository.findAll(pageable).toList();
+    public List<User> getAll(final Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .toList();
+    }
+
+    @Override
+    public User findById(final String id) {
+        return userRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "User [id=" + id + "] does not exist"
+                        )
+                );
     }
 
     @Override

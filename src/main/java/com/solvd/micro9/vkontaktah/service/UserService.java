@@ -9,6 +9,8 @@ public interface UserService {
 
     List<User> getAll(Pageable pageable);
 
-    User save(final User user);
+    User findById(String id);
+
+    User save(User user);
 
 }

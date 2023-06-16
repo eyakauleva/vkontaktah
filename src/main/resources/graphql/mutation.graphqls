@@ -1,3 +1,5 @@
 type Mutation {
     saveUser(user: UserInput!): User
+    savePost(post: PostInput!): Post
+    likePost(postId: String! @NotBlank, like: LikeInput!): Post
 }
