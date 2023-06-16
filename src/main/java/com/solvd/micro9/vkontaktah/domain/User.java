@@ -2,7 +2,7 @@ package com.solvd.micro9.vkontaktah.domain;
 
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
@@ -12,8 +12,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 public class User {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     private String login;
 
@@ -24,5 +23,10 @@ public class User {
     private Gender gender;
 
     private Integer age;
+
+    @Version
+    private Long version;
+
+
 
 }
