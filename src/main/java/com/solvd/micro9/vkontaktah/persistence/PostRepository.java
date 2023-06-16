@@ -16,7 +16,9 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
                    @Param("postId") String postId);
 
     @Query("MATCH (liker:User {id: $userId}), (post:Post {id: $postId}) "
-            + "CREATE (liker)-[relationship:LIKED {value: $value}]->(post) "
+            + "MERGE (liker)-[relationship:LIKED]->(post) "
+            + "ON CREATE SET relationship.value=$value "
+            + "ON MATCH SET relationship.value=$value "
             + "WITH post "
             + "MATCH postWithRelations=(:User)-[]-(post) "
             + "RETURN collect(postWithRelations)")
