@@ -26,6 +26,22 @@ public class PostController {
         return postService.getAll(pageable);
     }
 
+    @QueryMapping("findPostsByAuthor")
+    public List<Post> findByAuthor(@Argument final String authorId,
+                                   @Argument final int size,
+                                   @Argument final int page) {
+        Pageable pageable = PageRequest.of(page, size);
+        return postService.findByAuthor(authorId, pageable);
+    }
+
+    @QueryMapping("findPostsByLiker")
+    public List<Post> findByLiker(@Argument final String likerId,
+                                  @Argument final int size,
+                                  @Argument final int page) {
+        Pageable pageable = PageRequest.of(page, size);
+        return postService.findByLiker(likerId, pageable);
+    }
+
     @MutationMapping("savePost")
     public Post save(@Argument final Post post) {
         return postService.save(post);

@@ -2,8 +2,8 @@ package com.solvd.micro9.vkontaktah.service;
 
 import com.solvd.micro9.vkontaktah.domain.Like;
 import com.solvd.micro9.vkontaktah.domain.Post;
-
 import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 public interface PostService {
@@ -12,9 +12,7 @@ public interface PostService {
 
     List<Post> findByAuthor(String authorId, Pageable pageable);
 
-    List<Post> findByEstimator(String estimatorId, Pageable pageable);
-
-    Post findById(String postId);
+    List<Post> findByLiker(String likerId, Pageable pageable);
 
     Post save(Post post);
 

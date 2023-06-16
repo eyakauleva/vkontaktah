@@ -2,13 +2,11 @@ package com.solvd.micro9.vkontaktah.service.impl;
 
 import com.solvd.micro9.vkontaktah.domain.Like;
 import com.solvd.micro9.vkontaktah.domain.Post;
-import com.solvd.micro9.vkontaktah.domain.exception.ResourceNotFoundException;
 import com.solvd.micro9.vkontaktah.persistence.PostRepository;
 import com.solvd.micro9.vkontaktah.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,26 +25,23 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findByAuthor(final String authorId, final Pageable pageable) {
-        return null;
+        return postRepository.findByAuthor(
+                authorId,
+                pageable.getOffset(),
+                pageable.getPageSize()
+        );
     }
 
     @Override
-    public List<Post> findByEstimator(final String estimatorId, final Pageable pageable) {
-        return null;
+    public List<Post> findByLiker(final String likerId, final Pageable pageable) {
+        return postRepository.findByLiker(
+                likerId,
+                pageable.getOffset(),
+                pageable.getPageSize()
+        );
     }
 
     @Override
-    public Post findById(final String postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Post [id=" + postId + "] does not exist"
-                        )
-                );
-    }
-
-    @Override
-    @Transactional
     public Post save(final Post post) {
         String authorId = post.getAuthor().getId();
         post.setId(UUID.randomUUID().toString());
