@@ -14,6 +14,8 @@ public interface PostService {
 
     List<Post> findByLiker(String likerId, Pageable pageable);
 
+    List<Post> findAuthorTop(String authorId, Integer count);
+
     Post save(Post post);
 
     Post like(String postId, Like like);

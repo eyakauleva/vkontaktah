@@ -42,6 +42,12 @@ public class PostController {
         return postService.findByLiker(likerId, pageable);
     }
 
+    @QueryMapping("findAuthorTopPosts")
+    public List<Post> findAuthorTop(@Argument final String authorId,
+                                    @Argument final int count) {
+        return postService.findAuthorTop(authorId, count);
+    }
+
     @MutationMapping("savePost")
     public Post save(@Argument final Post post) {
         return postService.save(post);

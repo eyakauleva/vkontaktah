@@ -46,4 +46,15 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
                            @Param("offset") Long offset,
                            @Param("limit") Integer limit);
 
+    @Query("MATCH (:User {id: $authorId})-[:CREATED]->(posts:Post) "
+            + "WITH posts "
+            + "MATCH (:User)-[likes:LIKED]->(posts) "
+            + "WITH posts, avg(toFloat(likes.value)) AS avgValue "
+            + "ORDER BY avgValue DESC "
+            + "LIMIT $count "
+            + "MATCH (allRelatedUsers:User)-[allRelationships]->(posts) "
+            + "RETURN DISTINCT posts, collect(allRelatedUsers), collect(allRelationships)")
+    List<Post> findAuthorTop(@Param("authorId") String authorId,
+                             @Param("count") Integer count);
+
 }

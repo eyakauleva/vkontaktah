@@ -42,6 +42,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> findAuthorTop(final String authorId, final Integer count) {
+        return postRepository.findAuthorTop(authorId, count);
+    }
+
+    @Override
     public Post save(final Post post) {
         String authorId = post.getAuthor().getId();
         post.setId(UUID.randomUUID().toString());
