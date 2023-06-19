@@ -16,6 +16,8 @@ public class PersistenceConfig {
     @PostConstruct
     public void init() {
         userRepository.createConstraints();
+        userRepository.createIndexes();
+        postRepository.createIndexes();
     }
 
 }

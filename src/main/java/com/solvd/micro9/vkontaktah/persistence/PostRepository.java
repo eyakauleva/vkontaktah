@@ -57,7 +57,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
     List<Post> findAuthorTop(@Param("authorId") String authorId,
                              @Param("count") Integer count);
 
-//    @Query("")
-//    void createIndexes();
+    @Query("CREATE RANGE INDEX post_id_idx IF NOT EXISTS FOR (post:Post) ON (post.id);")
+    void createIndexes();
 
 }

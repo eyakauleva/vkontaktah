@@ -10,7 +10,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
                 + "FOR (user:User) REQUIRE user.login IS UNIQUE;")
     void createConstraints();
 
-//    @Query("")
-//    void createIndexes();
+    @Query("CREATE RANGE INDEX user_id_idx IF NOT EXISTS FOR (user:User) ON (user.id);")
+    void createIndexes();
 
 }
