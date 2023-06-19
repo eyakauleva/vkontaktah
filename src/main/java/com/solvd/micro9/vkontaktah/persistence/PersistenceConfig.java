@@ -10,13 +10,12 @@ import org.springframework.data.neo4j.config.EnableNeo4jAuditing;
 @EnableNeo4jAuditing
 public class PersistenceConfig {
 
-    final public UserRepository userRepository;
-    final public PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
     @PostConstruct
     public void init() {
         userRepository.createConstraints();
-        postRepository.createConstraints();
     }
 
 }

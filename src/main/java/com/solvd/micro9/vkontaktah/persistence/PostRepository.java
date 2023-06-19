@@ -57,10 +57,6 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
     List<Post> findAuthorTop(@Param("authorId") String authorId,
                              @Param("count") Integer count);
 
-    @Query("CREATE CONSTRAINT post_text_required IF NOT EXISTS "
-            + "FOR (post:Post) REQUIRE post.text IS NOT NULL;")
-    void createConstraints();
-//
 //    @Query("")
 //    void createIndexes();
 
