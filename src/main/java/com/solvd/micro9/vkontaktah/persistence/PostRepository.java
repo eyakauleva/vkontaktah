@@ -10,7 +10,7 @@ import java.util.List;
 public interface PostRepository extends Neo4jRepository<Post, String> {
 
     @Query("MATCH (author:User {id: $userId}), (post:Post {id: $postId}) "
-            + "CREATE (author)-[relationship:CREATED]->(post) "
+            + "MERGE (author)-[relationship:CREATED]->(post) "
             + "RETURN author, post, relationship")
     Post setAuthor(@Param("userId") String userId,
                    @Param("postId") String postId);
@@ -57,7 +57,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
     List<Post> findAuthorTop(@Param("authorId") String authorId,
                              @Param("count") Integer count);
 
-    @Query("CREATE RANGE INDEX post_id_idx IF NOT EXISTS FOR (post:Post) ON (post.id);")
-    void createIndexes();
+    @Query("CREATE CONSTRAINT post_id_unique IF NOT EXISTS "
+            + "FOR (post:Post) REQUIRE post.id IS UNIQUE;")
+    void createConstraints();
 
 }
