@@ -12,8 +12,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
     @Query("MATCH (author:User {id: $userId}) "
             + "WITH author "
             + "MATCH (post:Post {id: $postId}) "
-            + "MERGE (author)-[relationship:CREATED]->(post) "
-            + "RETURN author, post, relationship")
+            + "MERGE result=(author)-[:CREATED]->(post) "
+            + "RETURN result")
     Post setAuthor(@Param("userId") String userId,
                    @Param("postId") String postId);
 
@@ -32,8 +32,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
     @Query("MATCH (author:User {id: $authorId})-[relationship:CREATED]->(posts:Post) "
             + "WITH posts "
-            + "MATCH (allRelatedUsers:User)-[allRelationships]-(posts) "
-            + "RETURN posts, collect(allRelationships), collect(allRelatedUsers) "
+            + "MATCH result=(:User)-[]-(posts) "
+            + "RETURN result "
             + "ORDER BY posts.created "
             + "SKIP $offset LIMIT $limit")
     List<Post> findByAuthor(@Param("authorId") String authorId,
@@ -42,8 +42,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
     @Query("MATCH (author:User {id: $likerId})-[relationship:LIKED]->(posts:Post) "
             + "WITH posts "
-            + "MATCH (allRelatedUsers:User)-[allRelationships]-(posts) "
-            + "RETURN posts, collect(allRelationships), collect(allRelatedUsers) "
+            + "MATCH result=(:User)-[]-(posts) "
+            + "RETURN result "
             + "ORDER BY posts.created "
             + "SKIP $offset LIMIT $limit")
     List<Post> findByLiker(@Param("likerId") String likerId,
@@ -54,8 +54,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
             + "WITH posts, avg(toFloat(likes.value)) AS avgValue "
             + "ORDER BY avgValue DESC "
             + "LIMIT $count "
-            + "MATCH (allRelatedUsers:User)-[allRelationships]->(posts) "
-            + "RETURN posts, collect(allRelatedUsers), collect(allRelationships)")
+            + "MATCH result=(:User)-[]->(posts) "
+            + "RETURN result")
     List<Post> findAuthorTop(@Param("authorId") String authorId,
                              @Param("count") Integer count);
 
