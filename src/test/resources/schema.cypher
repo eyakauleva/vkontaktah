@@ -1,0 +1,1 @@
+CREATE (:User{name: "Paras Bansal"});
