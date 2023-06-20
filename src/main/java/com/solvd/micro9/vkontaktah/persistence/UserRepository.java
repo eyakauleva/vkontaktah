@@ -6,10 +6,12 @@ import org.springframework.data.neo4j.repository.query.Query;
 
 public interface UserRepository extends Neo4jRepository<User, String> {
 
+    @Query("CREATE CONSTRAINT user_id_unique IF NOT EXISTS "
+            + "FOR (user:User) REQUIRE user.id IS UNIQUE")
+    void createIdConstraint();
+
     @Query("CREATE CONSTRAINT user_login_unique IF NOT EXISTS "
-            + "FOR (user:User) REQUIRE user.login IS UNIQUE;"
-            + "CREATE CONSTRAINT user_id_unique IF NOT EXISTS "
-            + "FOR (user:User) REQUIRE user.id IS UNIQUE;")
-    void createConstraints();
+                + "FOR (user:User) REQUIRE user.login IS UNIQUE")
+    void createLoginConstraint();
 
 }

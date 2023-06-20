@@ -15,8 +15,9 @@ public class PersistenceConfig {
 
     @PostConstruct
     public void init() {
-        userRepository.createConstraints();
-        postRepository.createConstraints();
+        userRepository.createIdConstraint();
+        userRepository.createLoginConstraint();
+        postRepository.createIdConstraint();
     }
 
 }
