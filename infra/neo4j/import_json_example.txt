@@ -1,0 +1,7 @@
+CALL apoc.load.json('https://api.stackexchange.com/2.2/questions?pagesize=5&order=desc&sort=creation&tagged=neo4j&site=stackoverflow&filter=!5-i6Zw8Y)4W7vpy91PMYsKM-k9yzEsSC1_Uxlf')
+YIELD value
+UNWIND value.items as q
+MERGE (question:Question {id:q.question_id})
+    ON CREATE SET question.title=q.title, question.answered=q.is_answered
+MERGE (u:Userw)-[:ANSWERED]->(question)
+foreach (t in q.tags | MERGE (tag:Tag {name:t}) MERGE (question)-[:TAGGED]->(tag))
