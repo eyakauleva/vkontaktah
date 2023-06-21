@@ -32,8 +32,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
     @Query("MATCH (author:User {id: $authorId})-[relationship:CREATED]->(posts:Post) "
             + "WITH posts "
-            + "MATCH result=(:User)-[]-(posts) "
-            + "RETURN result "
+            + "MATCH (allRelatedUsers:User)-[allRelationships]-(posts) "
+            + "RETURN DISTINCT posts, collect(allRelatedUsers), collect(allRelationships) "
             + "ORDER BY posts.created "
             + "SKIP $offset LIMIT $limit")
     List<Post> findByAuthor(@Param("authorId") String authorId,
@@ -42,8 +42,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
 
     @Query("MATCH (author:User {id: $likerId})-[relationship:LIKED]->(posts:Post) "
             + "WITH posts "
-            + "MATCH result=(:User)-[]-(posts) "
-            + "RETURN result "
+            + "MATCH (allRelatedUsers:User)-[allRelationships]-(posts) "
+            + "RETURN DISTINCT posts, collect(allRelatedUsers), collect(allRelationships) "
             + "ORDER BY posts.created "
             + "SKIP $offset LIMIT $limit")
     List<Post> findByLiker(@Param("likerId") String likerId,
@@ -54,8 +54,8 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
             + "WITH posts, avg(toFloat(likes.value)) AS avgValue "
             + "ORDER BY avgValue DESC "
             + "LIMIT $count "
-            + "MATCH result=(:User)-[]->(posts) "
-            + "RETURN result")
+            + "MATCH (allRelatedUsers:User)-[allRelationships]-(posts) "
+            + "RETURN DISTINCT posts, collect(allRelatedUsers), collect(allRelationships)")
     List<Post> findAuthorTop(@Param("authorId") String authorId,
                              @Param("count") Integer count);
 
