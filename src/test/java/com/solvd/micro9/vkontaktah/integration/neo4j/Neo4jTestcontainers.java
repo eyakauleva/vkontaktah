@@ -21,15 +21,15 @@ abstract class Neo4jTestcontainers {
                     .withEnv("dbms.security.procedures.allowlist", "apoc.cypher.*")
                     .withEnv("dbms.security.procedures.unrestricted", "apoc.cypher.*")
                     .withCopyFileToContainer(
-                            MountableFile.forClasspathResource("apoc-5.8.1-extended.jar"),
+                            MountableFile.forClasspathResource("neo4j/apoc-5.8.1-extended.jar"),
                             "/var/lib/neo4j/plugins/"
                     )
                     .withCopyFileToContainer(
-                            MountableFile.forClasspathResource("/schema.cypher"),
+                            MountableFile.forClasspathResource("/neo4j/schema.cypher"),
                             "/var/lib/neo4j/db_init/"
                     )
                     .withCopyFileToContainer(
-                            MountableFile.forClasspathResource("/apoc.conf"),
+                            MountableFile.forClasspathResource("/neo4j/apoc.conf"),
                             "/var/lib/neo4j/conf/"
                     );
 
