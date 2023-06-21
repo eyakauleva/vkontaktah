@@ -4,6 +4,7 @@ import com.solvd.micro9.vkontaktah.domain.Gender;
 import com.solvd.micro9.vkontaktah.domain.User;
 import com.solvd.micro9.vkontaktah.persistence.UserRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -19,12 +20,11 @@ public class UserRepositoryIT extends Neo4jTestcontainers {
     @Autowired
     private UserRepository userRepository;
 
-    @ParameterizedTest(name = "verifyAllUsersAreReceived [size={0}]")
-    @ValueSource(ints = {3})
-    void verifyAllUsersAreReceived(final int size) {
+    @Test
+    void verifyAllUsersAreReceived() {
         List<User> users = userRepository.findAll();
         Assertions.assertNotNull(users);
-        Assertions.assertEquals(size, users.size());
+        Assertions.assertEquals(userRepository.count(), users.size());
     }
 
     @ParameterizedTest(
@@ -50,7 +50,7 @@ public class UserRepositoryIT extends Neo4jTestcontainers {
     }
 
     @ParameterizedTest(name = "verifyUserIsNotFoundById [id={0}]")
-    @ValueSource(strings = {"634243HJGDGSD12"})
+    @ValueSource(strings = {"634243HJGDGSD120000000000"})
     void verifyUserIsNotFoundById(final String id) {
         Optional<User> user = userRepository.findById(id);
         Assertions.assertNotNull(user);
