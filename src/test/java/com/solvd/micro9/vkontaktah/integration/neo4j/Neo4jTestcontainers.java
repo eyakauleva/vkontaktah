@@ -12,9 +12,8 @@ import org.testcontainers.utility.MountableFile;
 @Testcontainers
 abstract class Neo4jTestcontainers {
 
-    //TODO change to private
     @Container
-    public static final Neo4jContainer<?> NEO4J_CONTAINER =
+    private static final Neo4jContainer<?> NEO4J_CONTAINER =
             new Neo4jContainer<>(DockerImageName.parse("neo4j:5.8.0"))
                     .withRandomPassword()
                     .withLabsPlugins(Neo4jLabsPlugin.APOC)
@@ -38,7 +37,10 @@ abstract class Neo4jTestcontainers {
     static void neo4jProperties(final DynamicPropertyRegistry registry) {
         registry.add("spring.neo4j.uri", NEO4J_CONTAINER::getBoltUrl);
         registry.add("spring.neo4j.authentication.username", () -> "neo4j");
-        registry.add("spring.neo4j.authentication.password", NEO4J_CONTAINER::getAdminPassword);
+        registry.add(
+                "spring.neo4j.authentication.password",
+                NEO4J_CONTAINER::getAdminPassword
+        );
     }
 
 }
