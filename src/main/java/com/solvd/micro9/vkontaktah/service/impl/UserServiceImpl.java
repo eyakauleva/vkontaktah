@@ -2,7 +2,6 @@ package com.solvd.micro9.vkontaktah.service.impl;
 
 import com.solvd.micro9.vkontaktah.domain.Gender;
 import com.solvd.micro9.vkontaktah.domain.User;
-import com.solvd.micro9.vkontaktah.domain.exception.ResourceNotFoundException;
 import com.solvd.micro9.vkontaktah.persistence.UserRepository;
 import com.solvd.micro9.vkontaktah.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,16 +21,6 @@ public class UserServiceImpl implements UserService {
     public List<User> getAll(final Pageable pageable) {
         return userRepository.findAll(pageable)
                 .toList();
-    }
-
-    @Override
-    public User findById(final String id) {
-        return userRepository.findById(id)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "User [id=" + id + "] does not exist"
-                        )
-                );
     }
 
     @Override
