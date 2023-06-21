@@ -2,6 +2,7 @@ package com.solvd.micro9.vkontaktah.service.impl;
 
 import com.solvd.micro9.vkontaktah.domain.Like;
 import com.solvd.micro9.vkontaktah.domain.Post;
+import com.solvd.micro9.vkontaktah.domain.exception.ResourceNotFoundException;
 import com.solvd.micro9.vkontaktah.persistence.PostRepository;
 import com.solvd.micro9.vkontaktah.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -58,7 +60,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post like(final String postId, final Like like) {
-        return postRepository.addLike(like.getUser().getId(), postId, like.getValue());
+        try {
+            return postRepository.addLike(like.getUser().getId(), postId, like.getValue());
+        } catch (NoSuchElementException ex) {
+            throw new ResourceNotFoundException(
+                    "Post or user does not exist. Check the provided ids"
+            );
+        }
     }
 
 }
