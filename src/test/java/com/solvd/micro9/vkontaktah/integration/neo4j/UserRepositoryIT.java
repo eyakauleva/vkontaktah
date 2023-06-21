@@ -41,12 +41,14 @@ public class UserRepositoryIT extends Neo4jTestcontainers {
         Optional<User> user = userRepository.findById(id);
         Assertions.assertNotNull(user);
         Assertions.assertTrue(user.isPresent());
-        Assertions.assertEquals(user.get().getId(), id);
-        Assertions.assertEquals(user.get().getLogin(), login);
-        Assertions.assertEquals(user.get().getFirstName(), firstName);
-        Assertions.assertEquals(user.get().getLastName(), lastName);
-        Assertions.assertEquals(user.get().getGender(), gender);
-        Assertions.assertEquals(user.get().getAge(), age);
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(user.get().getId(), id),
+                () -> Assertions.assertEquals(user.get().getLogin(), login),
+                () -> Assertions.assertEquals(user.get().getFirstName(), firstName),
+                () -> Assertions.assertEquals(user.get().getLastName(), lastName),
+                () -> Assertions.assertEquals(user.get().getGender(), gender),
+                () -> Assertions.assertEquals(user.get().getAge(), age)
+        );
     }
 
     @ParameterizedTest(name = "verifyUserIsNotFoundById [id={0}]")
