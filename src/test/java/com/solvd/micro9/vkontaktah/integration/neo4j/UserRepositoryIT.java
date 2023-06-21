@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest(classes = Neo4ITConfig.class)
-public class UserRepositoryIT extends Neo4jTestcontainers {
+class UserRepositoryIT extends Neo4jTestcontainers {
 
     @Autowired
     private UserRepository userRepository;

@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @SpringBootTest(classes = Neo4ITConfig.class)
-public class PostRepositoryIT extends Neo4jTestcontainers {
+class PostRepositoryIT extends Neo4jTestcontainers {
 
     @Autowired
     private PostRepository postRepository;
