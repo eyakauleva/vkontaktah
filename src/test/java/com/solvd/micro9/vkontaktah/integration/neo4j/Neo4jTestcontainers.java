@@ -21,7 +21,9 @@ abstract class Neo4jTestcontainers {
                     .withEnv("dbms.security.procedures.allowlist", "apoc.cypher.*")
                     .withEnv("dbms.security.procedures.unrestricted", "apoc.cypher.*")
                     .withCopyFileToContainer(
-                            MountableFile.forClasspathResource("neo4j/apoc-5.8.1-extended.jar"),
+                            MountableFile.forClasspathResource(
+                                    "neo4j/apoc-5.8.1-extended.jar"
+                            ),
                             "/var/lib/neo4j/plugins/"
                     )
                     .withCopyFileToContainer(
