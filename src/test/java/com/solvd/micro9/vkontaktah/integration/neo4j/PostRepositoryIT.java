@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @SpringBootTest(classes = Neo4ITConfig.class)
+@DirtiesContext
 class PostRepositoryIT extends Neo4jTestcontainers {
 
     @Autowired
