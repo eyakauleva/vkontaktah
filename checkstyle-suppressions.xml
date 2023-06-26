@@ -8,6 +8,4 @@
     <suppress files="target/generated-sources/*" checks="[a-zA-Z0-9]*"/>
     <suppress files="src/main/java/com/solvd/micro9/vkontaktah/StartApplication.java"
               checks="HideUtilityClassConstructor"/>
-    <suppress files="src/test/java/com/solvd/micro9/vkontaktah/service/PostServiceImplTest.java"
-              lines="104" checks="LineLength"/>
 </suppressions>
