@@ -26,20 +26,24 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findByAuthor(final String authorId, final Pageable pageable) {
+    public List<Post> findByAuthor(
+            final String authorId, final String cursor, final int pageSize
+    ) {
         return postRepository.findByAuthor(
                 authorId,
-                pageable.getOffset(),
-                pageable.getPageSize()
+                cursor,
+                pageSize
         );
     }
 
     @Override
-    public List<Post> findByLiker(final String likerId, final Pageable pageable) {
+    public List<Post> findByLiker(
+            final String likerId, final String cursor, final int pageSize
+    ) {
         return postRepository.findByLiker(
                 likerId,
-                pageable.getOffset(),
-                pageable.getPageSize()
+                cursor,
+                pageSize
         );
     }
 

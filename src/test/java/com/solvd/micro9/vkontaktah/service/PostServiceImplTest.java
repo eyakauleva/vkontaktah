@@ -57,14 +57,15 @@ public class PostServiceImplTest {
     void verifyPostsAreFoundByAuthor(
             final List<Post> expectedPosts, final String authorId
     ) {
-        Pageable pageable = PageRequest.of(0, 100);
+        String cursor = "0";
+        int pageSize = 100;
         Mockito.when(
                         postRepository.findByAuthor(
-                                authorId, pageable.getOffset(), pageable.getPageSize()
+                                authorId, cursor, pageSize
                         )
                 )
                 .thenReturn(expectedPosts);
-        List<Post> resultPosts = postService.findByAuthor(authorId, pageable);
+        List<Post> resultPosts = postService.findByAuthor(authorId, cursor, pageSize);
         Assertions.assertNotNull(resultPosts);
         Assertions.assertEquals(expectedPosts, resultPosts);
         resultPosts.forEach(
@@ -77,14 +78,15 @@ public class PostServiceImplTest {
             "com.solvd.micro9.vkontaktah.service.TestDataProvider#getPostsWithLikerId"
     )
     void verifyPostsAreFoundByLiker(final List<Post> expectedPosts, final String likerId) {
-        Pageable pageable = PageRequest.of(0, 100);
+        String cursor = "0";
+        int pageSize = 100;
         Mockito.when(
                         postRepository.findByLiker(
-                                likerId, pageable.getOffset(), pageable.getPageSize()
+                                likerId, cursor, pageSize
                         )
                 )
                 .thenReturn(expectedPosts);
-        List<Post> resultPosts = postService.findByLiker(likerId, pageable);
+        List<Post> resultPosts = postService.findByLiker(likerId, cursor, pageSize);
         Assertions.assertNotNull(resultPosts);
         Assertions.assertEquals(expectedPosts, resultPosts);
         resultPosts.forEach(post -> {

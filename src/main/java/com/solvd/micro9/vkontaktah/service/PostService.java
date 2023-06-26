@@ -10,9 +10,9 @@ public interface PostService {
 
     List<Post> getAll(Pageable pageable);
 
-    List<Post> findByAuthor(String authorId, Pageable pageable);
+    List<Post> findByAuthor(String authorId, String cursor, int pageSize);
 
-    List<Post> findByLiker(String likerId, Pageable pageable);
+    List<Post> findByLiker(String likerId, String cursor, int pageSize);
 
     List<Post> findAuthorTop(String authorId, Integer count);
 

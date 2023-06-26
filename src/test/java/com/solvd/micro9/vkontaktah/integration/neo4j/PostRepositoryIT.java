@@ -33,17 +33,17 @@ class PostRepositoryIT extends Neo4jTestcontainers {
 
     @ParameterizedTest(
             name = "verifyPostsAreFoundByAuthor "
-                    + "[authorId={0},pageOffset={1},pageLimit={2}]"
+                    + "[authorId={0},cursor={1},pageSize={2}]"
     )
     @CsvSource({
             "12, 0, 10"
     })
     void verifyPostsAreFoundByAuthor(
-            final String authorId, final long pageOffset, final int pageLimit
+            final String authorId, final String cursor, final int pageSize
     ) {
-        List<Post> posts = postRepository.findByAuthor(authorId, pageOffset, pageLimit);
+        List<Post> posts = postRepository.findByAuthor(authorId, cursor, pageSize);
         Assertions.assertNotNull(posts);
-        Assertions.assertTrue(posts.size() <= pageLimit);
+        Assertions.assertTrue(posts.size() <= pageSize);
         posts.forEach(post -> Assertions.assertEquals(authorId, post.getAuthor().getId()));
     }
 
@@ -52,23 +52,23 @@ class PostRepositoryIT extends Neo4jTestcontainers {
     void verifyPostsAreNotFoundByAuthor(final String authorId) {
         List<Post> posts =
                 Assertions.assertDoesNotThrow(
-                        () -> postRepository.findByAuthor(authorId, 0L, 100)
+                        () -> postRepository.findByAuthor(authorId, "0", 100)
                 );
         Assertions.assertTrue(posts == null || posts.size() == 0);
     }
 
     @ParameterizedTest(
-            name = "verifyPostsAreFoundByLiker [likerId={0},pageOffset={1},pageLimit={2}]"
+            name = "verifyPostsAreFoundByLiker [likerId={0},cursor={1},pageSize={2}]"
     )
     @CsvSource({
             "11, 0, 10"
     })
     void verifyPostsAreFoundByLiker(
-            final String likerId, final long pageOffset, final int pageLimit
+            final String likerId, final String cursor, final int pageSize
     ) {
-        List<Post> posts = postRepository.findByLiker(likerId, pageOffset, pageLimit);
+        List<Post> posts = postRepository.findByLiker(likerId, cursor, pageSize);
         Assertions.assertNotNull(posts);
-        Assertions.assertTrue(posts.size() <= pageLimit);
+        Assertions.assertTrue(posts.size() <= pageSize);
         posts.forEach(post -> {
             boolean userLiked = false;
             for (Like like : post.getLikes()) {

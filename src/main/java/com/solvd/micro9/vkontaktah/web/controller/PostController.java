@@ -28,18 +28,16 @@ public class PostController {
 
     @QueryMapping("findPostsByAuthor")
     public List<Post> findByAuthor(@Argument final String authorId,
-                                   @Argument final int size,
-                                   @Argument final int page) {
-        Pageable pageable = PageRequest.of(page, size);
-        return postService.findByAuthor(authorId, pageable);
+                                   @Argument final String cursor,
+                                   @Argument final int pageSize) {
+        return postService.findByAuthor(authorId, cursor, pageSize);
     }
 
     @QueryMapping("findPostsByLiker")
     public List<Post> findByLiker(@Argument final String likerId,
-                                  @Argument final int size,
-                                  @Argument final int page) {
-        Pageable pageable = PageRequest.of(page, size);
-        return postService.findByLiker(likerId, pageable);
+                                  @Argument final String cursor,
+                                  @Argument final int pageSize) {
+        return postService.findByLiker(likerId, cursor, pageSize);
     }
 
     @QueryMapping("findAuthorTopPosts")

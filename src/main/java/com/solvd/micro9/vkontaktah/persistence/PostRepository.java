@@ -31,23 +31,25 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
                  @Param("value") Float value);
 
     @Query("MATCH (author:User {id: $authorId})-[relationship:CREATED]->(posts:Post) "
+            + "WHERE posts.id > $cursor "
             + "WITH posts "
             + "MATCH (allRelatedUsers:User)-[allRelationships]-(posts) "
             + "RETURN DISTINCT posts, collect(allRelatedUsers), collect(allRelationships) "
-            + "ORDER BY posts.created "
-            + "SKIP $offset LIMIT $limit")
+            + "ORDER BY posts.id "
+            + "LIMIT $limit")
     List<Post> findByAuthor(@Param("authorId") String authorId,
-                            @Param("offset") Long offset,
+                            @Param("cursor") String cursor,
                             @Param("limit") Integer limit);
 
     @Query("MATCH (author:User {id: $likerId})-[relationship:LIKED]->(posts:Post) "
+            + "WHERE posts.id > $cursor "
             + "WITH posts "
             + "MATCH (allRelatedUsers:User)-[allRelationships]-(posts) "
             + "RETURN DISTINCT posts, collect(allRelatedUsers), collect(allRelationships) "
-            + "ORDER BY posts.created "
-            + "SKIP $offset LIMIT $limit")
+            + "ORDER BY posts.id "
+            + "LIMIT $limit")
     List<Post> findByLiker(@Param("likerId") String likerId,
-                           @Param("offset") Long offset,
+                           @Param("cursor") String cursor,
                            @Param("limit") Integer limit);
 
     @Query("MATCH (:User {id: $authorId})-[:CREATED]->(posts:Post)<-[likes:LIKED]-(:User) "
