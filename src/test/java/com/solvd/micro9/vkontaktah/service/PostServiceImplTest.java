@@ -106,7 +106,7 @@ public class PostServiceImplTest {
     @MethodSource(
             "com.solvd.micro9.vkontaktah.service.TestDataProvider#getSortedByAvgValuePostsWithAuthorId"
     )
-        // CSON: LineLength
+    // CSON: LineLength
     void verifyTopAuthorsPostsAreFound(
             final List<Post> expectedPosts, final String authorId
     ) {
