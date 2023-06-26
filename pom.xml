@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lombok.version>1.18.28</lombok.version>
         <spring.version>3.1.0</spring.version>
+        <neo4j-migrations.version>2.5.0</neo4j-migrations.version>
         <slf4j-api.version>2.0.7</slf4j-api.version>
         <graphql.validation.version>20.0</graphql.validation.version>
         <maven-checkstyle-plugin.version>3.2.2</maven-checkstyle-plugin.version>
@@ -55,6 +56,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.michael-simons.neo4j</groupId>
+            <artifactId>neo4j-migrations-spring-boot-starter</artifactId>
+            <version>${neo4j-migrations.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
