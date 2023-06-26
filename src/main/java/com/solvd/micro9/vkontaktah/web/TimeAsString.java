@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 @Component
-public class LocalDateTimeToStringCoercing implements Coercing<LocalDateTime, String> {
+public class TimeAsString implements Coercing<LocalDateTime, String> {
 
     @Override
     public String serialize(final Object input) {

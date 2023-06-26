@@ -13,7 +13,7 @@ public class WebConfig {
 
     @Bean
     public GraphQLScalarType localDateTimeScalar(
-            final LocalDateTimeToStringCoercing coercing
+            final TimeAsString coercing
     ) {
         return GraphQLScalarType.newScalar()
                 .name("LocalDateTime")
