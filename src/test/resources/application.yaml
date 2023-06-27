@@ -1,0 +1,5 @@
+org:
+  neo4j:
+    migrations:
+      enabled:
+        false
