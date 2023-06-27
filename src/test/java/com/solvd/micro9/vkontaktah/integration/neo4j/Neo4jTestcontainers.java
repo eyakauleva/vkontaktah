@@ -1,5 +1,8 @@
 package com.solvd.micro9.vkontaktah.integration.neo4j;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.Neo4jContainer;
@@ -11,6 +14,19 @@ import org.testcontainers.utility.MountableFile;
 
 @Testcontainers
 abstract class Neo4jTestcontainers {
+
+    @Autowired
+    private Neo4jClient neo4jClient;
+
+    @BeforeEach
+    void setup() {
+        neo4jClient.query("MATCH (n) DETACH DELETE n").run();
+        neo4jClient.query(
+                "CALL apoc.cypher.runFile("
+                        + "\"file:////var/lib/neo4j/db_init/schema.cypher\")"
+                )
+                .run();
+    }
 
     @Container
     private static final Neo4jContainer<?> NEO4J_CONTAINER =
