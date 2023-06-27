@@ -1,0 +1,24 @@
+type User {
+ id: ID
+ login: String
+ firstName: String
+ lastName: String
+ gender: Gender
+ age: Int
+}
+
+type Post {
+ id: ID
+ text: String
+ isEdited: Boolean
+ created: LocalDateTime
+ lastModified: LocalDateTime
+ author: User
+ likes: [Like]
+}
+
+type Like {
+ id: ID
+ value: Float
+ user: User
+}

@@ -31,7 +31,9 @@
 
 -->
 
+
 <module name="Checker">
+
     <!--
         If you set the basedir property below, then all reported file
         names will be relative to the specified directory. See
@@ -94,6 +96,12 @@
     <!--   <property name="headerFile" value="${checkstyle.header.file}"/> -->
     <!--   <property name="fileExtensions" value="java"/> -->
     <!-- </module> -->
+
+    <module name="SuppressWithPlainTextCommentFilter">
+        <property name="offCommentFormat" value="CSOFF\: ([\w\|]+)"/>
+        <property name="onCommentFormat" value="CSON\: ([\w\|]+)"/>
+        <property name="checkFormat" value="$1"/>
+    </module>
 
     <module name="TreeWalker">
 

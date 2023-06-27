@@ -1,0 +1,21 @@
+input UserInput {
+ login: String! @NotBlank
+ firstName: String! @NotBlank
+ lastName: String! @NotBlank
+ gender: Gender
+ age: Int @Positive @Digits(integer: 3, fraction: 0)
+}
+
+input PostInput {
+ text: String! @NotBlank
+ author: UserID!
+}
+
+input LikeInput {
+ value: Float! @Positive @Max(value: 10) @Digits(integer: 2, fraction: 1)
+ user: UserID!
+}
+
+input UserID {
+ id: String! @NotBlank
+}
