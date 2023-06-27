@@ -5,6 +5,7 @@ import com.solvd.micro9.vkontaktah.domain.Post;
 import com.solvd.micro9.vkontaktah.domain.User;
 import org.junit.jupiter.params.provider.Arguments;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -41,16 +42,29 @@ public final class TestDataProvider {
         );
     }
 
-    public static Stream<Post> getPost() {
+    public static Stream<Arguments> getPostsToCreateAndToMock() {
+        Post postToCreate = Post.builder()
+                .text("some text 1")
+                .author(
+                        User.builder()
+                                .id("62423")
+                                .build()
+                )
+                .build();
+        LocalDateTime localDateTime = LocalDateTime.now();
         return Stream.of(
-                Post.builder()
-                        .text("some text 1")
-                        .author(
-                                User.builder()
-                                        .id("62423")
-                                        .build()
-                        )
-                        .build()
+                Arguments.of(
+                        postToCreate,
+                        Post.builder()
+                                .id("111")
+                                .text(postToCreate.getText())
+                                .isEdited(false)
+                                .created(localDateTime)
+                                .lastModified(localDateTime)
+                                .version(0L)
+                                .author(postToCreate.getAuthor())
+                                .build()
+                )
         );
     }
 
@@ -165,6 +179,25 @@ public final class TestDataProvider {
                                         .build()
                         ),
                         authorId
+                )
+        );
+    }
+
+    public static Stream<Arguments> getLikeAndPostToMock() {
+        return Stream.of(
+                Arguments.of(
+                        Like.builder()
+                                .user(
+                                        User.builder()
+                                                .id("324342")
+                                                .build()
+                                )
+                                .value(5f)
+                                .build(),
+                        Post.builder()
+                                .id(UUID.randomUUID().toString())
+                                .text("some text 1")
+                                .build()
                 )
         );
     }

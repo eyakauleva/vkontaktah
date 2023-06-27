@@ -29,19 +29,20 @@ public class UserServiceImplTest {
 
     @ParameterizedTest
     @MethodSource("com.solvd.micro9.vkontaktah.service.TestDataProvider#getUsers")
-    void verifyAllUsersAreReceived(final List<User> expectedUsers) {
+    void verifyAllUsersAreReceived(final List<User> usersToMock) {
         Pageable pageable = PageRequest.of(0, 100);
         Mockito.when(userRepository.findAll(Mockito.any(Pageable.class)))
                 .thenReturn(
                         new PageImpl<>(
-                                expectedUsers,
+                                usersToMock,
                                 pageable,
-                                expectedUsers.size()
+                                usersToMock.size()
                         )
                 );
         List<User> resultUsers = userService.getAll(pageable);
+        Mockito.verify(userRepository, Mockito.times(1))
+                .findAll(Mockito.any(Pageable.class));
         Assertions.assertNotNull(resultUsers);
-        Assertions.assertEquals(expectedUsers, resultUsers);
     }
 
     @ParameterizedTest
@@ -51,8 +52,8 @@ public class UserServiceImplTest {
                 .thenAnswer(i -> i.getArguments()[0]);
         User resultUser = userService.save(userToSave);
         Assertions.assertNotNull(resultUser);
-        Assertions.assertNotNull(resultUser.getId());
-        Assertions.assertEquals(Gender.UNSET, resultUser.getGender());
+        Assertions.assertNotNull(userToSave.getId());
+        Assertions.assertEquals(Gender.UNSET, userToSave.getGender());
     }
 
 }

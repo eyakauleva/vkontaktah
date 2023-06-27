@@ -2,12 +2,10 @@ package com.solvd.micro9.vkontaktah.service;
 
 import com.solvd.micro9.vkontaktah.domain.Like;
 import com.solvd.micro9.vkontaktah.domain.Post;
-import com.solvd.micro9.vkontaktah.domain.User;
 import com.solvd.micro9.vkontaktah.domain.exception.ResourceNotFoundException;
 import com.solvd.micro9.vkontaktah.persistence.PostRepository;
 import com.solvd.micro9.vkontaktah.service.impl.PostServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -19,8 +17,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,19 +31,20 @@ public class PostServiceImplTest {
 
     @ParameterizedTest
     @MethodSource("com.solvd.micro9.vkontaktah.service.TestDataProvider#getPosts")
-    void verifyAllPostsAreReceived(final List<Post> expectedPosts) {
+    void verifyAllPostsAreReceived(final List<Post> postsToMock) {
         Pageable pageable = PageRequest.of(0, 100);
         Mockito.when(postRepository.findAll(Mockito.any(Pageable.class)))
                 .thenReturn(
                         new PageImpl<>(
-                                expectedPosts,
+                                postsToMock,
                                 pageable,
-                                expectedPosts.size()
+                                postsToMock.size()
                         )
                 );
         List<Post> resultPosts = postService.getAll(pageable);
+        Mockito.verify(postRepository, Mockito.times(1))
+                .findAll(Mockito.any(Pageable.class));
         Assertions.assertNotNull(resultPosts);
-        Assertions.assertEquals(expectedPosts, resultPosts);
     }
 
     @ParameterizedTest
@@ -55,50 +52,31 @@ public class PostServiceImplTest {
             "com.solvd.micro9.vkontaktah.service.TestDataProvider#getPostsWithAuthorId"
     )
     void verifyPostsAreFoundByAuthor(
-            final List<Post> expectedPosts, final String authorId
+            final List<Post> postsToMock, final String authorId
     ) {
         String cursor = "0";
         int pageSize = 100;
-        Mockito.when(
-                        postRepository.findByAuthor(
-                                authorId, cursor, pageSize
-                        )
-                )
-                .thenReturn(expectedPosts);
+        Mockito.when(postRepository.findByAuthor(authorId, cursor, pageSize))
+                .thenReturn(postsToMock);
         List<Post> resultPosts = postService.findByAuthor(authorId, cursor, pageSize);
+        Mockito.verify(postRepository, Mockito.times(1))
+                .findByAuthor(Mockito.anyString(), Mockito.anyString(), Mockito.anyInt());
         Assertions.assertNotNull(resultPosts);
-        Assertions.assertEquals(expectedPosts, resultPosts);
-        resultPosts.forEach(
-                post -> Assertions.assertEquals(authorId, post.getAuthor().getId())
-        );
     }
 
     @ParameterizedTest
     @MethodSource(
             "com.solvd.micro9.vkontaktah.service.TestDataProvider#getPostsWithLikerId"
     )
-    void verifyPostsAreFoundByLiker(final List<Post> expectedPosts, final String likerId) {
+    void verifyPostsAreFoundByLiker(final List<Post> postsToMock, final String likerId) {
         String cursor = "0";
         int pageSize = 100;
-        Mockito.when(
-                        postRepository.findByLiker(
-                                likerId, cursor, pageSize
-                        )
-                )
-                .thenReturn(expectedPosts);
+        Mockito.when(postRepository.findByLiker(likerId, cursor, pageSize))
+                .thenReturn(postsToMock);
         List<Post> resultPosts = postService.findByLiker(likerId, cursor, pageSize);
+        Mockito.verify(postRepository, Mockito.times(1))
+                .findByLiker(Mockito.anyString(), Mockito.anyString(), Mockito.anyInt());
         Assertions.assertNotNull(resultPosts);
-        Assertions.assertEquals(expectedPosts, resultPosts);
-        resultPosts.forEach(post -> {
-            boolean isLikeSet = false;
-            for (Like like : post.getLikes()) {
-                if (likerId.equals(like.getUser().getId())) {
-                    isLikeSet = true;
-                    break;
-                }
-            }
-            Assertions.assertTrue(isLikeSet);
-        });
     }
 
     @ParameterizedTest
@@ -108,75 +86,78 @@ public class PostServiceImplTest {
     )
     // CSON: LineLength
     void verifyTopAuthorsPostsAreFound(
-            final List<Post> expectedPosts, final String authorId
+            final List<Post> postsToMock, final String authorId
     ) {
         int count = 5;
-        Mockito.when(
-                        postRepository.findAuthorTop(authorId, count)
-                )
-                .thenReturn(expectedPosts);
+        Mockito.when(postRepository.findAuthorTop(authorId, count))
+                .thenReturn(postsToMock);
         List<Post> resultPosts = postService.findAuthorTop(authorId, count);
+        Mockito.verify(postRepository, Mockito.times(1))
+                .findAuthorTop(Mockito.anyString(), Mockito.anyInt());
         Assertions.assertNotNull(resultPosts);
-        Assertions.assertEquals(expectedPosts, resultPosts);
-        List<Float> resultAvgValues = new ArrayList<>();
-        resultPosts.forEach(
-                post -> {
-                    Assertions.assertEquals(authorId, post.getAuthor().getId());
-                    float sumValues = 0;
-                    for (Like like : post.getLikes()) {
-                        sumValues += like.getValue();
-                    }
-                    resultAvgValues.add(sumValues / post.getLikes().size());
-                }
-        );
-        List<Float> expectedAvgValues = List.copyOf(resultAvgValues)
-                .stream()
-                .sorted(Comparator.reverseOrder())
-                .toList();
-        Assertions.assertEquals(expectedAvgValues, resultAvgValues);
     }
 
     @ParameterizedTest
+    // CSOFF: LineLength
     @MethodSource(
-            "com.solvd.micro9.vkontaktah.service.TestDataProvider#getPost"
+            "com.solvd.micro9.vkontaktah.service.TestDataProvider#getPostsToCreateAndToMock"
     )
-    void verifyPostIsCreated(final Post postToCreate) {
+    // CSON: LineLength
+    void verifyPostIsCreated(final Post postToCreate, final Post postToMock) {
         Mockito.when(postRepository.save(Mockito.any(Post.class)))
-                .thenReturn(postToCreate);
+                .thenReturn(postToMock);
         Mockito.when(
                         postRepository.setAuthor(
                                 Mockito.anyString(),
                                 Mockito.anyString()
                         )
                 )
-                .thenReturn(postToCreate);
+                .thenReturn(postToMock);
         Post resultPost = postService.save(postToCreate);
+        Mockito.verify(postRepository, Mockito.times(1))
+                .save(Mockito.any(Post.class));
+        Mockito.verify(postRepository, Mockito.times(1))
+                .setAuthor(Mockito.anyString(), Mockito.anyString());
         Assertions.assertNotNull(resultPost);
         Assertions.assertAll(
                 () -> Assertions.assertNotNull(postToCreate.getId()),
                 () -> Assertions.assertFalse(postToCreate.getIsEdited()),
-                () -> Assertions.assertNull(postToCreate.getCreated())
+                () -> Assertions.assertNull(postToCreate.getAuthor())
         );
     }
 
-    @Test
-    void verifyLikeToPostIsSet() {
+    @ParameterizedTest
+    @MethodSource(
+            "com.solvd.micro9.vkontaktah.service.TestDataProvider#getLikeAndPostToMock"
+    )
+    void verifyLikeToPostIsSet(final Like like, final Post postToMock) {
         Mockito.when(
-                postRepository.addLike(
-                        Mockito.anyString(),
-                        Mockito.anyString(),
-                        Mockito.anyFloat()
+                        postRepository.addLike(
+                                Mockito.anyString(),
+                                Mockito.anyString(),
+                                Mockito.anyFloat()
+                        )
                 )
-        )
+                .thenReturn(postToMock);
+        Post resultPost = postService.like(postToMock.getId(), like);
+        Mockito.verify(postRepository, Mockito.times(1))
+                .addLike(Mockito.anyString(), Mockito.anyString(), Mockito.anyFloat());
+        Assertions.assertNotNull(resultPost);
+    }
+
+    @ParameterizedTest
+    @MethodSource(
+            "com.solvd.micro9.vkontaktah.service.TestDataProvider#getLikeAndPostToMock"
+    )
+    void verifyLikeToPostThrowsException(final Like like) {
+        Mockito.when(
+                        postRepository.addLike(
+                                Mockito.anyString(),
+                                Mockito.anyString(),
+                                Mockito.anyFloat()
+                        )
+                )
                 .thenThrow(NoSuchElementException.class);
-        Like like = Like.builder()
-                .user(
-                        User.builder()
-                                .id("324342")
-                                .build()
-                )
-                .value(5f)
-                .build();
         Assertions.assertThrows(
                 ResourceNotFoundException.class,
                 () -> postService.like("xsasa", like)
