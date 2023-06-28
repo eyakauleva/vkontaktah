@@ -30,7 +30,7 @@ public class PostServiceImplTest {
     private PostServiceImpl postService;
 
     @ParameterizedTest
-    @MethodSource("com.solvd.micro9.vkontaktah.service.TestDataProvider#getPosts")
+    @MethodSource("com.solvd.micro9.vkontaktah.TestDataProvider#getPosts")
     void verifyAllPostsAreReceived(final List<Post> postsToMock) {
         Pageable pageable = PageRequest.of(0, 100);
         Mockito.when(postRepository.findAll(Mockito.any(Pageable.class)))
@@ -49,7 +49,7 @@ public class PostServiceImplTest {
 
     @ParameterizedTest
     @MethodSource(
-            "com.solvd.micro9.vkontaktah.service.TestDataProvider#getPostsWithAuthorId"
+            "com.solvd.micro9.vkontaktah.TestDataProvider#getPostsWithAuthorId"
     )
     void verifyPostsAreFoundByAuthor(
             final List<Post> postsToMock, final String authorId
@@ -66,7 +66,7 @@ public class PostServiceImplTest {
 
     @ParameterizedTest
     @MethodSource(
-            "com.solvd.micro9.vkontaktah.service.TestDataProvider#getPostsWithLikerId"
+            "com.solvd.micro9.vkontaktah.TestDataProvider#getPostsWithLikerId"
     )
     void verifyPostsAreFoundByLiker(final List<Post> postsToMock, final String likerId) {
         String cursor = "0";
@@ -82,7 +82,7 @@ public class PostServiceImplTest {
     @ParameterizedTest
     // CSOFF: LineLength
     @MethodSource(
-            "com.solvd.micro9.vkontaktah.service.TestDataProvider#getSortedByAvgValuePostsWithAuthorId"
+            "com.solvd.micro9.vkontaktah.TestDataProvider#getSortedByAvgValuePostsWithAuthorId"
     )
     // CSON: LineLength
     void verifyTopAuthorsPostsAreFound(
@@ -100,12 +100,12 @@ public class PostServiceImplTest {
     @ParameterizedTest
     // CSOFF: LineLength
     @MethodSource(
-            "com.solvd.micro9.vkontaktah.service.TestDataProvider#getPostsToCreateAndToMock"
+            "com.solvd.micro9.vkontaktah.TestDataProvider#getPostsToCreateAndToMock"
     )
     // CSON: LineLength
     void verifyPostIsCreated(final Post postToCreate, final Post postToMock) {
         Mockito.when(postRepository.save(Mockito.any(Post.class)))
-                .thenReturn(postToMock);
+                .thenAnswer(i -> i.getArguments()[0]);
         Mockito.when(
                         postRepository.setAuthor(
                                 Mockito.anyString(),
@@ -128,7 +128,7 @@ public class PostServiceImplTest {
 
     @ParameterizedTest
     @MethodSource(
-            "com.solvd.micro9.vkontaktah.service.TestDataProvider#getLikeAndPostToMock"
+            "com.solvd.micro9.vkontaktah.TestDataProvider#getLikeAndPostToMock"
     )
     void verifyLikeToPostIsSet(final Like like, final Post postToMock) {
         Mockito.when(
@@ -147,7 +147,7 @@ public class PostServiceImplTest {
 
     @ParameterizedTest
     @MethodSource(
-            "com.solvd.micro9.vkontaktah.service.TestDataProvider#getLikeAndPostToMock"
+            "com.solvd.micro9.vkontaktah.TestDataProvider#getLikeAndPostToMock"
     )
     void verifyLikeToPostThrowsException(final Like like) {
         Mockito.when(

@@ -28,7 +28,7 @@ public class UserServiceImplTest {
     private UserServiceImpl userService;
 
     @ParameterizedTest
-    @MethodSource("com.solvd.micro9.vkontaktah.service.TestDataProvider#getUsers")
+    @MethodSource("com.solvd.micro9.vkontaktah.TestDataProvider#getUsers")
     void verifyAllUsersAreReceived(final List<User> usersToMock) {
         Pageable pageable = PageRequest.of(0, 100);
         Mockito.when(userRepository.findAll(Mockito.any(Pageable.class)))
@@ -46,7 +46,7 @@ public class UserServiceImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("com.solvd.micro9.vkontaktah.service.TestDataProvider#getUser")
+    @MethodSource("com.solvd.micro9.vkontaktah.TestDataProvider#getUser")
     void verifyUserIsSaved(final User userToSave) {
         Mockito.when(userRepository.save(Mockito.any(User.class)))
                 .thenAnswer(i -> i.getArguments()[0]);

@@ -1,4 +1,4 @@
-package com.solvd.micro9.vkontaktah.service;
+package com.solvd.micro9.vkontaktah;
 
 import com.solvd.micro9.vkontaktah.domain.Like;
 import com.solvd.micro9.vkontaktah.domain.Post;
@@ -16,6 +16,17 @@ public final class TestDataProvider {
     private TestDataProvider() {
     }
 
+    public static Stream<User> getUser() {
+        return Stream.of(
+                User.builder()
+                        .login("MyLogin")
+                        .firstName("MyName")
+                        .lastName("MySurname")
+                        .age(21)
+                        .build()
+        );
+    }
+
     public static Stream<List<User>> getUsers() {
         return Stream.of(
                 List.of(
@@ -31,14 +42,18 @@ public final class TestDataProvider {
         );
     }
 
-    public static Stream<User> getUser() {
+    public static Stream<List<Post>> getPosts() {
         return Stream.of(
-                User.builder()
-                        .login("MyLogin")
-                        .firstName("MyName")
-                        .lastName("MySurname")
-                        .age(21)
-                        .build()
+                List.of(
+                        Post.builder()
+                                .id(UUID.randomUUID().toString())
+                                .text("some text 1")
+                                .build(),
+                        Post.builder()
+                                .id(UUID.randomUUID().toString())
+                                .text("some text 2")
+                                .build()
+                )
         );
     }
 
@@ -63,21 +78,6 @@ public final class TestDataProvider {
                                 .lastModified(localDateTime)
                                 .version(0L)
                                 .author(postToCreate.getAuthor())
-                                .build()
-                )
-        );
-    }
-
-    public static Stream<List<Post>> getPosts() {
-        return Stream.of(
-                List.of(
-                        Post.builder()
-                                .id(UUID.randomUUID().toString())
-                                .text("some text 1")
-                                .build(),
-                        Post.builder()
-                                .id(UUID.randomUUID().toString())
-                                .text("some text 2")
                                 .build()
                 )
         );
@@ -184,19 +184,23 @@ public final class TestDataProvider {
     }
 
     public static Stream<Arguments> getLikeAndPostToMock() {
+        Like like = Like.builder()
+                .user(
+                        User.builder()
+                                .id("324342")
+                                .build()
+                )
+                .value(5f)
+                .build();
         return Stream.of(
                 Arguments.of(
-                        Like.builder()
-                                .user(
-                                        User.builder()
-                                                .id("324342")
-                                                .build()
-                                )
-                                .value(5f)
-                                .build(),
+                        like,
                         Post.builder()
                                 .id(UUID.randomUUID().toString())
                                 .text("some text 1")
+                                .likes(
+                                        Set.of(like)
+                                )
                                 .build()
                 )
         );
