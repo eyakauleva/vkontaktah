@@ -6,6 +6,7 @@ import com.solvd.micro9.vkontaktah.service.PostService;
 import com.solvd.micro9.vkontaktah.web.controller.PostController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,6 +159,37 @@ public class PostControllerIT {
         Mockito.verify(postService, Mockito.times(1))
                 .like(Mockito.anyString(), Mockito.any(Like.class));
         Assertions.assertNotNull(resultPost);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "null, 10, userId",
+            "'', 10, userId",
+            "postId, null, userId",
+            "postId, -10, userId",
+            "postId, 11, userId",
+            "postId, 100, userId",
+            "postId, 8.555, userId",
+            "postId, 10, null",
+            "postId, 10, ''",
+    },
+            nullValues = {"null"}
+    )
+    void verifyArgsAreValidatedWhenLikeIsSet(
+            final String postId, final Float value, final String userId
+    ) {
+        String query = "mutation { likePost(postId: \"" + postId
+                + "\", like: {value: " + value
+                + ", user: {id: \"" + userId
+                + "\" } } ) { id, text, likes { user { id } } } }";
+        Assertions.assertThrows(
+                Throwable.class,
+                () -> this.tester.document(query)
+                        .execute()
+                        .path("data.likePost")
+                        .entity(Post.class)
+                        .get()
+        );
     }
 
 }

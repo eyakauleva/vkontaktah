@@ -6,6 +6,7 @@ import com.solvd.micro9.vkontaktah.web.controller.UserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,33 @@ public class UserControllerIT {
         Assertions.assertTrue(resultUsers.size() > 0);
     }
 
+    @ParameterizedTest
+    @CsvSource(value =
+            {
+                "null, 10",
+                "10, null",
+                "null, null",
+                "0, 0",
+                "1, -10",
+                "0, -10"
+            },
+            nullValues = {"null"}
+    )
+    void verifyArgsAreValidatedWhenGetAllUsers(
+            final Integer size, final Integer page
+    ) {
+        String query = "{ getAllUsers(size:" + size + ", page:" + page + ") "
+                + "{ id login firstName lastName gender age } }";
+        Assertions.assertThrows(
+                Throwable.class,
+                () -> this.tester.document(query)
+                        .execute()
+                        .path("data.getAllUsers[*]")
+                        .entityList(User.class)
+                        .get()
+        );
+    }
+
     @Test
     void verifyUserIsSaved() {
         String login = "iviviv1";
@@ -66,6 +94,39 @@ public class UserControllerIT {
         Assertions.assertEquals(login, resultUser.getLogin());
         Assertions.assertEquals(firstName, resultUser.getFirstName());
         Assertions.assertEquals(lastName, resultUser.getLastName());
+    }
+
+    @ParameterizedTest
+    @CsvSource(value =
+            {
+                "null, firstname, lastname, 25",
+                "'', firstname, lastname, 25",
+                "login, null, lastname, 25",
+                "login, '', lastname, 25",
+                "login, firstname, null, 25",
+                "login, firstname, '', 25",
+                "login, firstname, lastname, -10",
+                "login, firstname, lastname, 100",
+                "login, firstname, lastname, 20.54",
+            },
+            nullValues = {"null"}
+    )
+    void verifyArgsAreValidatedWhenSaveUser(
+            final String login, final String firstName,
+            final String lastName, final Float age
+    ) {
+        String query = "mutation { saveUser (user: { login: \"" + login
+                + "\" firstName: \"" + firstName + "\" lastName: \""
+                + lastName + "\" age: " + age + " }) "
+                + "{ id login firstName lastName gender age } }";
+        Assertions.assertThrows(
+                Throwable.class,
+                () -> this.tester.document(query)
+                        .execute()
+                        .path("data.saveUser")
+                        .entity(User.class)
+                        .get()
+        );
     }
 
 }
