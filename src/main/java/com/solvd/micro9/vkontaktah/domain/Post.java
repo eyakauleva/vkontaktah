@@ -1,7 +1,9 @@
 package com.solvd.micro9.vkontaktah.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
@@ -15,6 +17,8 @@ import java.util.Set;
 @Node
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Post {
 
     @Id
